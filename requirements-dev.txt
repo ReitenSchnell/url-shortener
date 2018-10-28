@@ -6,3 +6,4 @@ pytest-mock==1.10.0
 WebTest==2.0.23
 flake8-import-order==0.18
 flake8-quotes==1.0.0
+requests==2.4.3

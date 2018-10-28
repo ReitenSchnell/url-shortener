@@ -23,7 +23,7 @@ class ShortenUrlController(object):
         url_to_shorten = bottle.request.json["url"]
         self._logger.debug("created short url for {}".format(url_to_shorten))
         hashed_url = "foo"
-        shortened_url = "{}{}".format(self._config[ENV_BASE_URL], hashed_url)
+        shortened_url = self._config[ENV_BASE_URL] + hashed_url
         result = {
             "shortened_url": shortened_url
         }
