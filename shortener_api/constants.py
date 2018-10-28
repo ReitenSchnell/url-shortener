@@ -8,4 +8,4 @@ LOG_FORMAT = "%(asctime)s %(name)s [%(worker_id)s] (%(request_id)s) %(levelname)
 APP_NAME = "shortener-api"
 UNHANDLED_ERROR_TEXT = "Unhandled error occurred"
 
-ENV_BASE_URL = "http://localhost/"
+ENV_BASE_URL = "ENV_BASE_URL"
