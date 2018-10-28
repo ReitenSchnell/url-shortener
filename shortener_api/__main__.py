@@ -1,5 +1,4 @@
 import bottle
-
 import shortener_api
 import shortener_api.constants as constants
 
