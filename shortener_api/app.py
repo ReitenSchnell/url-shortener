@@ -27,7 +27,7 @@ def init_logger():
 
 def init_config():
     variable_names = {
-        constants.ENV_BASE_URL: "http://localhost/"
+        constants.ENV_BASE_URL: "http://localhost"
     }
     config = {env_var: os.getenv(env_var, default_value)
               for (env_var, default_value) in variable_names.items()}

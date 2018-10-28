@@ -1,0 +1,44 @@
+FROM debian:latest
+
+#install dependencies
+RUN apt-get update
+RUN apt-get install -y \
+    python3-all \
+    build-essential \
+    python3-setuptools \
+    python3-pip \
+    python-virtualenv \
+    nginx \
+    uwsgi \
+    uwsgi-plugin-python3
+
+#prepare
+RUN mkdir -p /opt/app/src
+COPY . /opt/app/src
+RUN rm -rf /opt/app/src/dist
+RUN virtualenv -p python3 /opt/app/env
+RUN /opt/app/env/bin/pip install -U pip setuptools wheel tox
+
+#code check, unit tests, build
+WORKDIR /opt/app/src
+RUN py3clean .
+RUN /opt/app/env/bin/tox
+RUN /opt/app/env/bin/python setup.py bdist_wheel
+
+#install
+RUN /opt/app/env/bin/pip install /opt/app/src/dist/*.whl
+
+#copy infra files
+COPY ./infrastructure/uwsgi.ini /etc/uwsgi/apps-enabled/shortener-api-uwsgi.ini
+COPY ./infrastructure/nginx.conf /etc/nginx/sites-available/shortener-api
+RUN ln -s /etc/nginx/sites-available/shortener-api /etc/nginx/sites-enabled
+COPY ./infrastructure/run.sh /run.sh
+RUN chmod +x /run.sh
+
+#remove old files
+RUN rm -rf /opt/app/src
+
+#execute
+ENTRYPOINT ["/run.sh"]
+EXPOSE 8000
+CMD ["uwsgi", "--ini", "/etc/uwsgi/apps-enabled/shortener-api-uwsgi.ini"]
