@@ -21,7 +21,7 @@ def test_shortened_url_contains_base_url_and_code_of_expected_length():
     full_url = result.json()["shortened_url"]
     short_code = full_url[len(SERVICE_BASE_ADDRESS) + 1:]
     assert SERVICE_BASE_ADDRESS in full_url
-    assert 6 == len(short_code)
+    assert 8 == len(short_code)
 
 
 def test_returns_different_shortened_urls_in_response_to_same_original_url():

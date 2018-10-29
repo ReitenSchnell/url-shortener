@@ -9,6 +9,7 @@ from .bottle_plugins.request_id_plugin import SessionIdPlugin
 from .exception_handler import ExceptionHandler
 from .log_filters import RequestIdFilter, WorkerIdFilter
 from .service_logic.repository import RedisRepository
+from .service_logic.shortener import Shortener
 
 
 def init_logger():
@@ -51,10 +52,11 @@ def setup_application():
     bottle_application.install(SessionIdPlugin())
 
     repository = RedisRepository(logger, config)
+    shortener = Shortener(logger, config, repository)
 
     controller_list = [
         controllers.ErrorController(),
-        controllers.ShortenUrlController(logger, config, repository),
+        controllers.ShortenUrlController(logger, config, shortener),
         controllers.RedirectController(logger, config, repository),
     ]
 

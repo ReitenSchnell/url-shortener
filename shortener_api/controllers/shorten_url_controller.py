@@ -1,12 +1,12 @@
 import bottle
-from shortener_api.constants import ENV_BASE_URL
+import validators
 
 
 class ShortenUrlController(object):
-    def __init__(self, logger, config, repository):
+    def __init__(self, logger, config, shortener):
         self._logger = logger
         self._config = config
-        self._repository = repository
+        self._shortener = shortener
 
     def get_routes(self):
         return [
@@ -19,11 +19,17 @@ class ShortenUrlController(object):
 
     def post_url(self):
         if "url" not in bottle.request.json:
-            return bottle.HTTPResponse(status=400)
-        url_to_shorten = bottle.request.json["url"]
-        self._logger.debug("created short url for {}".format(url_to_shorten))
-        hashed_url = "abcde1"
-        shortened_url = self._config[ENV_BASE_URL] + hashed_url
+            malformed_body_error = "request body is malformed"
+            self._logger.warn(malformed_body_error)
+            return bottle.HTTPResponse(status=400, data=malformed_body_error)
+
+        original_url = bottle.request.json["url"]
+        if not validators.url(original_url):
+            invalid_url_error = "original url {} is not valid".format(original_url)
+            self._logger.warn(invalid_url_error)
+            return bottle.HTTPResponse(status=400, data=invalid_url_error)
+
+        shortened_url = self._shortener.create_shortened_url(original_url)
         result = {
             "shortened_url": shortened_url
         }
