@@ -11,6 +11,8 @@ class Shortener(object):
     def create_shortened_url(self, original_url):
         self._logger.debug("starting to create shortened version of {}".format(original_url))
         hasher = UrlHasher(self._logger)
-        hashed_url = hasher.get_hashed_url(original_url)
-        shortened_url = self._config[ENV_BASE_URL] + hashed_url
-        return shortened_url
+        hashed_code = hasher.get_hashed_url(original_url)
+        full_shortened_url = self._config[ENV_BASE_URL] + hashed_code
+        self._logger.debug("shortened url is {}".format(full_shortened_url))
+        self._repository.save_value(hashed_code, original_url)
+        return full_shortened_url

@@ -1,3 +1,5 @@
 bottle==0.12.7
 uwsgidecorators==1.1.0
 validators==0.12.2
+redis==2.10.6
+pybreaker==0.4.4

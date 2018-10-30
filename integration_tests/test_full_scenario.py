@@ -34,7 +34,7 @@ def test_returns_different_shortened_urls_in_response_to_same_original_url():
 
 
 def test_redirects_to_original_url():
-    original_url = "http://some.com"
+    original_url = "https://www.babylonhealth.com/"
     request_body = {"url": original_url}
     shortened_response = requests.post(SERVICE_BASE_ADDRESS + SHORTEN_ROUTE, json=request_body)
 

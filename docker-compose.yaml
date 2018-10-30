@@ -7,7 +7,13 @@ services:
       dockerfile: Dockerfile.api
     environment:
     - ENV_BASE_URL=http://localhost:8000/
+    - ENV_REDIS_HOST=redis
+    - ENV_REDIS_PORT=6379
     restart: always
     ports:
-    - "8000:8000"
+    - 8000:8000
     tty: true
+  redis:
+    image: redis:latest
+    ports:
+    - 6379:6379
