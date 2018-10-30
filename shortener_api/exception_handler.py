@@ -8,6 +8,6 @@ class ExceptionHandler(object):
             return self.app(environ, start_response)
         except Exception as ex:
             self.logger.exception("unhandled error occurred: {}".format(ex))
-            environ["PATH_INFO"] = "/api/error"
+            environ["PATH_INFO"] = "/error"
             environ["error_text"] = str(ex)
             return self.app(environ, start_response)

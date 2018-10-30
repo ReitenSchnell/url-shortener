@@ -21,13 +21,13 @@ class ShortenUrlController(object):
         if "url" not in bottle.request.json:
             malformed_body_error = "request body is malformed"
             self._logger.warn(malformed_body_error)
-            return bottle.HTTPResponse(status=400, data=malformed_body_error)
+            return bottle.HTTPResponse(status=400, body=malformed_body_error)
 
         original_url = bottle.request.json["url"]
         if not validators.url(original_url):
             invalid_url_error = "original url {} is not valid".format(original_url)
             self._logger.warn(invalid_url_error)
-            return bottle.HTTPResponse(status=400, data=invalid_url_error)
+            return bottle.HTTPResponse(status=400, body=invalid_url_error)
 
         shortened_url = self._shortener.create_shortened_url(original_url)
         result = {
