@@ -11,7 +11,7 @@ While designing the service, I assumed following:
 
 ## How to run the service
 Make sure you have following software installed:
-- Python 3.4 with pip and virtualenv
+- Python 3.5 with pip and virtualenv
 - [Tox](https://tox.readthedocs.io/en/latest/) - could be installed by pip
 - Docker-compose
 - Docker
