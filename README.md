@@ -1,9 +1,9 @@
 ## Design assumptions
 While designing the service, I assumed following:
-1. Our service should generate a shorter and unique alias of an original URL
-2. The alias should have a constant length of 8 characters
+1. Our service should generate a shorter and unique alias of an original URL.
+2. The alias should have a constant length of 8 characters.
 3. Every time an URL is shortened, the result should be different even for the same URL. In production-ready systems this constraint might be relaxed within a user scope.
-4. It is very likely that our service will be read-heavy. We assume 10:1 ratio for reads and writes
+4. It is very likely that our service will be read-heavy. We assume 10:1 ratio for reads and writes.
 
 #### What could be improved
 1. It might be good to have a mechanism for links expiration. Otherwise we will face unnecessary scaling issues on data storage layer (not to mention storage/backups costs). 
@@ -27,13 +27,14 @@ Make sure you have following software installed:
 2. Since it is not possible to infer full URL from the short code, we will have to introduce a data storage into our system.
 3. Our data model is key-value pairs (short code as key and original URL as value), therefore the most natural way of storing such data is Redis, working in persistence mode.
 4. To resolve possible key duplications, we will check if the key is already taken and generate a new one, if needed.
+5. Taking into account that the system should be designed for high load scenarios, the application logic was protected from possible cascading failures by a thin layer of circuit breaker in front of Redis calls.  
 ### Scaling strategy
-Our performance test showed that default Docker setup allows the service to handle ~400 requests per second (see the *Performance testing results* section).
+Our performance tests showed that default Docker setup allows the service to handle ~400 requests per second (within the assumed read:write ratio).
 The application was designed with shared-nothing approach in mind, so it could be easily scaled horizontally:
 1. As a first step, we could deploy as many instances of the web application as we need and add a load balancer in front of them.
 2. When storage performance becomes a bottleneck, we will introduce master/slave replication to Redis and add load balancer in front of redis slave nodes. After that, we change the application to perform read operations only from Redis slave nodes.
-3. When storage volume/memory consumption becomes an issue, we could use partitioning on Redis.
-4. If our application starts having performance issues on write operations, we will add message queue to our design and parallel URL shortening tasks, decoupling hash generation from writing to Redis.
+3. When storage volume/memory consumption becomes an issue, we could use partitioning on Redis. At this stage it will be especially important to have data expiration/purging mechanism implemented.
+4. If our application starts having performance issues on write operations, we will add message queue to our design. It will allow to parallel URL shortening tasks, decoupling hash generation from writing to storage.
 
 
 ### Technology stack
@@ -52,7 +53,8 @@ Below is a brief list of all frameworks and libraries used in the project:
 
 ### Project structure
 - **infrastructure** folder - contains configuration files for nginx web server and uwsgi middleware along with the entrypoint script _run.sh_ for the application's docker container.
-- **integration tests** folder - integration tests, that check main application's scenarios.
+- **integration tests** folder - contains integration tests, that check main application's scenarios.
+- **performance_tests** folder - contains Gatling script for running performance testing scenario.
 - **shortener_api** folder - contains the application code.
 - **tests** folder - folder for the unit tests. Its internal structure mirrors the structure of the code folder.
 - **.flake8** - rules for code style check.
@@ -63,5 +65,5 @@ Below is a brief list of all frameworks and libraries used in the project:
 - **requirements-dev.txt** - development dependencies, required for running tests, style check, etc.
 - **setup.py** - package distribution specification.
 - **tox.ini** - build automation description, which includes all steps required for checking code quality.
-### Performance testing results
+
 
