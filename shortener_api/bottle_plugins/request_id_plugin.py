@@ -5,6 +5,7 @@ import bottle
 
 
 class SessionIdPlugin(object):
+    """Bottle plugin for storing request id across application."""
     def __init__(self):
         pass
 

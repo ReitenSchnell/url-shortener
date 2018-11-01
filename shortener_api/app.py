@@ -1,3 +1,5 @@
+"""Start-up script for the bottle application."""
+
 import logging
 import os
 
@@ -13,6 +15,7 @@ from .service_logic.shortener import Shortener
 
 
 def init_logger():
+    """Create logger and setup its format."""
     service_logger = logging.getLogger(constants.APP_NAME)
     service_logger.addFilter(RequestIdFilter())
     service_logger.addFilter(WorkerIdFilter())
@@ -28,6 +31,7 @@ def init_logger():
 
 
 def init_config():
+    """Read application configuration from environment variables."""
     variable_names = {
         constants.ENV_BASE_URL: "http://localhost",
         constants.ENV_REDIS_PORT: "8080",
@@ -44,6 +48,7 @@ application = ExceptionHandler(bottle_application, logger)
 
 
 def setup_application():
+    """Create controllers and their dependencies."""
     bottle_application.catchall = False
 
     config = init_config()

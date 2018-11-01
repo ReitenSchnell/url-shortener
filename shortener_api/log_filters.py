@@ -4,6 +4,7 @@ import bottle
 
 
 class RequestIdFilter(logging.Filter):
+    """Log filter for request id propagation across application."""
     @staticmethod
     def get_request_id(default=None):
         try:
@@ -19,6 +20,7 @@ class RequestIdFilter(logging.Filter):
 
 
 class WorkerIdFilter(logging.Filter):
+    """Log filter for uwsgi worker id propagation across application."""
     def filter(self, record):
         record.worker_id = 0
         try:

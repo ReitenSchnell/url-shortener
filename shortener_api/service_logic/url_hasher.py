@@ -10,6 +10,7 @@ class UrlHasher(object):
         self._logger = logger
 
     def get_hashed_url(self, url):
+        """Compute an unique hash of the given URL with SHA256 algorithm and return it encoded as base64 string."""
         salt = uuid.uuid4()
         encoding = "utf-8"
         salted_url = "{}{}".format(url, salt).encode(encoding)

@@ -2,6 +2,7 @@ import bottle
 
 
 class RedirectController(object):
+    """Controller that is responsible for redirection to original URL on GET request."""
     def __init__(self, logger, config, repository):
         self._logger = logger
         self._config = config
@@ -17,6 +18,7 @@ class RedirectController(object):
         ]
 
     def redirect_to_full_url(self, short_code):
+        """Find original URL by its short code and redirect user to the URL."""
         full_url = self._repository.read_value(short_code)
         if not full_url:
             error_text = "full url by short code {} is not found".format(short_code)

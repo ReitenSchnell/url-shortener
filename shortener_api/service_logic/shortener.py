@@ -9,6 +9,7 @@ class Shortener(object):
         self._repository = repository
 
     def create_shortened_url(self, original_url):
+        """Perform URL hashing, store the result along with original URL and return shortened URL."""
         self._logger.debug("starting to create shortened version of {}".format(original_url))
         hasher = UrlHasher(self._logger)
         hashed_code = hasher.get_hashed_url(original_url)

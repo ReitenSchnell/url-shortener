@@ -1,3 +1,4 @@
+"""Script for starting up bottle application without uwsgi."""
 import bottle
 import shortener_api
 import shortener_api.constants as constants

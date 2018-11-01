@@ -3,6 +3,7 @@ import validators
 
 
 class ShortenUrlController(object):
+    """Controller that is responsible for URL shortening in response to POST request."""
     def __init__(self, logger, config, shortener):
         self._logger = logger
         self._config = config
@@ -18,6 +19,7 @@ class ShortenUrlController(object):
         ]
 
     def post_url(self):
+        """Receive a JSON body, validate it and return shortened URL inside the response body."""
         if "url" not in bottle.request.json:
             malformed_body_error = "request body is malformed"
             self._logger.warn(malformed_body_error)

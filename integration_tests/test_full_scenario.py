@@ -1,3 +1,4 @@
+"""Integration tests for URL shortener. Should be run against service hosted in Docker."""
 import requests
 
 SERVICE_BASE_ADDRESS = "http://localhost:8000"
