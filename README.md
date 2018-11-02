@@ -39,7 +39,7 @@ The application was designed with shared-nothing approach in mind, so it could b
 
 ### Technology stack
 Below is a brief list of all frameworks and libraries used in the project:
-1. Interpreter:	Python version 3.4
+1. Interpreter:	Python version 3.5
 2. Web framework: Bottle
 3. Database: Redis (supposed to be used with persistence switched on)
 4. Web server: Ngnix
